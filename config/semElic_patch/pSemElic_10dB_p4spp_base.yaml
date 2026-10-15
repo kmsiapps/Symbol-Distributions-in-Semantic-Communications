@@ -1,0 +1,52 @@
+# python train_sem.py config/semElic_patch/pSemElic_10dB_p4spp_base.yaml
+# python train_sem_debug.py config/semElic_patch/pSemElic_10dB_p4spp_base.yaml
+# nohup python train_sem.py config/semElic_patch/pSemElic_10dB_p4spp_base.yaml 1>logs/pSemElic_10dB_p4spp_base/nohup.out 2>&1 &
+
+experiment_name: pSemElic_10dB_p4spp_base
+
+# Model
+model: SemELIC
+model_params: {
+  N: 192,
+  M: 320,
+  small: True,
+  snrdB: 10, 
+  num_symbols: 16384
+}
+
+# Loss
+loss_type: mse
+factorized: False
+lmbda: 1.0e-4
+
+# Epoch
+initial_epoch: 0
+epochs: 1000
+
+# Batch Size
+train_batch_size: 32
+valid_repetitions: 1
+use_mini_dataset: True
+
+# Learning
+seed: 100
+learning_rate: 1.0e-4
+lr_milestone_epoch: [4000]
+clip_max_norm: 1.0
+
+# Dataset
+train_dataset: ImageNet Patch 80000
+train_dataset_root: /datasets/ImageNet8000Patches/
+valid_dataset: Kodak
+valid_dataset_root: /datasets/Kodak/
+log_dir: logs/
+num_workers: 12
+use_cache: False
+
+# Checkpoint
+save_model: True
+checkpoint: ./logs/fSemELIC_sm10dB_base_fac/weights/Epoch_599.pth.tar
+
+# GPU
+gpu_ids: ['0', '1', '2', '3'] # Multi: use all devices / Single: use any available devices
+dist_backend: nccl # Only works for multi_gpu learning

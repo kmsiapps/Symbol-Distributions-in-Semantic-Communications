@@ -1,0 +1,54 @@
+# nohup python train_ntc.py config/config_elicSimple.yaml 1>logs/ELIC_simple/nohup.out 2>&1 &
+# nohup python train_ntc.py config/config_elicSimple.yaml 1>logs/ELIC_simple_o08/nohup.out 2>&1 &
+
+experiment_name: ELIC_simple_o08
+
+# Model
+model: ELIC_Simple
+model_params: {
+  N: 192,
+  M: 320,
+  small: False
+}
+
+# Loss
+lmbda: 0.08
+# 0.08, 0.16
+
+# Epoch
+initial_epoch: 0
+epochs: 4100
+
+# Batch Size
+train_batch_size: 32
+valid_repetitions: 1
+use_mini_dataset: False
+
+# Learning
+seed: 1030
+learning_rate: 1.0e-4
+aux_learning_rate: 1.0e-3
+lr_milestone_epoch: [4000]
+clip_max_norm: 1.0
+
+# Dataset
+train_dataset: ImageNet Large 8000
+train_dataset_root: /datasets/ImageNet/
+valid_dataset: Kodak
+valid_dataset_root: /datasets/Kodak/
+log_dir: logs/
+num_workers: 16
+
+# Checkpoint
+save_model: True
+checkpoint: ./logs/ELIC_simple/latest_ckpt_ep2772.pth.tar
+
+# GPU
+gpu_ids: ['0', '1', '2', '3'] # Multi: use all devices / Single: use any available devices
+dist_backend: nccl # Only works for multi_gpu learning
+
+# Single GPU training Usage
+# python train.py ./config/config_elic.yaml
+
+# Multi GPU training Usage
+# torchrun --nproc_per_node=4 train.py ./config/config_elic.yaml

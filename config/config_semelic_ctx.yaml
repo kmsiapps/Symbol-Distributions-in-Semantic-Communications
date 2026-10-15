@@ -1,0 +1,56 @@
+# Single GPU training Usage
+# python train_sem.py config/config_semelic_ctx.yaml
+
+# Multi GPU training Usage
+# torchrun --nproc_per_node=4 train_sem.py config/config_semelic_ctx.yaml
+
+
+experiment_name: SemELICtx-Small-TxAll_10dB
+
+# Model
+model: SemELIC_Ctx
+model_params: {
+  N: 192,
+  M: 320,
+  small: True,
+  snrdB: 10, 
+  num_symbols: 16384,
+  num_side_symbols: 1024, # maybe 768
+  snrdB_sim: 199
+}
+
+# Loss
+loss_type: mse # norm_KL
+lmbda: 1.0e-4 
+
+# Epoch
+epochs: 1000
+
+# Batch Size
+train_batch_size: 8
+valid_batch_size: 1
+use_mini_dataset: False
+valid_repetitions: 1
+
+# Learning
+seed: 100
+learning_rate: 1.0e-4
+lr_milestone_epoch: []
+clip_max_norm: 1.0
+
+# Dataset
+train_dataset: ImageNet Large 8000
+train_dataset_root: /datasets/ImageNet/
+valid_dataset: Kodak
+valid_dataset_root: /datasets/Kodak/
+log_dir: logs/
+num_workers: 16
+use_cache: False
+
+# Checkpoint
+save_model: True
+# checkpoint: ./logs/SemELIC-Ctx-EvenNumSymbols-UseTxAll_10dB/weights/Epoch_249.pth.tar
+
+# GPU
+gpu_ids: ['0', '1', '2', '3'] # Multi: use all devices / Single: use any available devices
+dist_backend: nccl # Only works for multi_gpu learning

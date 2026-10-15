@@ -1,0 +1,51 @@
+# python train_sem.py config/semElic/semelic_20dB_base_fac.yaml
+# nohup python train_sem.py config/semElic/semelic_20dB_base_fac.yaml 1>logs/SemELIC_sm20dB_base_fac/nohup.out 2>&1 &
+
+experiment_name: SemELIC_sm20dB_base_fac
+
+# Model
+model: SemELIC
+model_params: {
+  N: 192,
+  M: 320,
+  small: True,
+  snrdB: 20, 
+  num_symbols: 16384
+}
+
+# Loss
+loss_type: mse
+factorized: True
+lmbda: 1.0e-4
+
+# Epoch
+initial_epoch: 0
+epochs: 2000
+
+# Batch Size
+train_batch_size: 8
+valid_repetitions: 1
+use_mini_dataset: False
+
+# Learning
+seed: 100
+learning_rate: 1.0e-4
+lr_milestone_epoch: [4000]
+clip_max_norm: 1.0
+
+# Dataset
+train_dataset: ImageNet Large 8000
+train_dataset_root: /datasets/ImageNet8000/
+valid_dataset: Kodak
+valid_dataset_root: /datasets/Kodak/
+log_dir: logs/
+num_workers: 12
+use_cache: False
+
+# Checkpoint
+save_model: True
+checkpoint: ./logs/SemELIC_sm20dB_base_fac/latest_ckpt_ep359.pth.tar
+
+# GPU
+gpu_ids: ['0', '1', '2', '3'] # Multi: use all devices / Single: use any available devices
+dist_backend: nccl # Only works for multi_gpu learning

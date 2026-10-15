@@ -1,0 +1,53 @@
+experiment_name: elic_small
+
+# Model
+model: ELIC
+model_params: {
+  N: 192,
+  M: 320,
+  num_slices: 5,
+  small: True
+}
+
+# Loss
+loss: mse
+lmbda: 0.45
+# 0.08, 0.16
+
+# Epoch
+initial_epoch: 0
+epochs: 4100
+
+# Batch Size
+train_batch_size: 16
+valid_batch_size: 24
+use_mini_dataset: False
+
+# Learning
+seed: 100
+learning_rate: 4.0e-4
+aux_learning_rate: 1.0e-3
+lr_milestone_epoch: [4000]
+clip_max_norm: 1.0
+
+# Dataset
+train_dataset: ImageNet Large 8000
+train_dataset_root: /datasets/ImageNet/
+valid_dataset: Kodak
+valid_dataset_root: /datasets/Kodak/
+log_dir: logs/
+num_workers: 32
+
+# Checkpoint
+save_model: True
+# checkpoint: ./path_to_checkpoint.pth
+
+# GPU
+gpu_ids: ['0', '1', '2', '3'] # Multi: use all devices / Single: use any available devices
+dist_backend: nccl # Only works for multi_gpu learning
+
+# Single GPU training Usage
+# python train.py ./config/config_elic.yaml
+
+# Multi GPU training Usage
+# torchrun --nproc_per_node=4 train.py ./config/config_elic.yaml

@@ -1,0 +1,59 @@
+# Single GPU training Usage
+# python train_sem.py ./config/config_semtcm.yaml
+
+# nohup python train_sem.py config/config_semtcm.yaml 1>logs/SemTCM_10dB/nohup.out 2>&1 &
+
+# Multi GPU training Usage
+# torchrun --nproc_per_node=4 train_sem.py config/config_semtcm.yaml
+
+# nohup torchrun --nproc_per_node=4 train_sem.py config/config_semtcm.yaml 1>logs/SemTCM_10dB/nohup.out 2>&1 &
+
+experiment_name: SemTCM_10dB
+
+# Model
+model: SemTCM
+model_params: {
+  N: 128,
+  M: 320,
+  config: [2,2,2,2,2,2],
+  head_dim: [8, 16, 32, 32, 16, 8],
+  drop_path_rate: 0.0,
+  snrdB: 10, 
+  num_symbols: 16384
+}
+
+# Loss
+loss_type: mse
+lmbda: 1
+
+# Epoch
+initial_epoch: 0
+epochs: 2000
+
+# Batch Size
+train_batch_size: 8
+valid_repetitions: 1
+use_mini_dataset: False
+
+# Learning
+seed: 1030
+learning_rate: 1.0e-4
+lr_milestone_epoch: [1000, 2000]
+clip_max_norm: 1.0
+
+# Dataset
+train_dataset: ImageNet Large 8000
+train_dataset_root: /datasets/ImageNet/
+valid_dataset: Kodak
+valid_dataset_root: /datasets/Kodak/
+log_dir: logs/
+num_workers: 48
+
+# Checkpoint
+save_model: True
+# checkpoint: ./path_to_checkpoint.pth
+
+# GPU
+gpu_ids: ['0', '1', '2', '3'] # Multi: use all devices / Single: use any available devices
+dist_backend: nccl # Only works for multi_gpu learning
+

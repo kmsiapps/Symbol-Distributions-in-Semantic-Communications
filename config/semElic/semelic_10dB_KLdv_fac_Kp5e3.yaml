@@ -1,0 +1,51 @@
+
+# nohup python train_sem.py config/semElic/semelic_10dB_KLdv_fac_Kp5e3.yaml 1>logs/SemELIC_sm10dB_KLdv_fac_Kp5e3/nohup.out 2>&1 &
+
+experiment_name: SemELIC_sm10dB_KLdv_fac_Kp5e3
+
+# Model
+model: SemELIC
+model_params: {
+  N: 192,
+  M: 320,
+  small: True,
+  snrdB: 10, 
+  num_symbols: 16384
+}
+
+# Loss
+loss_type: KL_div
+factorized: True
+lmbda: 5.0e-3
+
+# Epoch
+initial_epoch: 1000
+epochs: 1300
+
+# Batch Size
+train_batch_size: 8
+valid_repetitions: 1
+use_mini_dataset: False
+
+# Learning
+seed: 100
+learning_rate: 1.0e-4
+lr_milestone_epoch: [4000]
+clip_max_norm: 1.0
+
+# Dataset
+train_dataset: ImageNet Large 8000
+train_dataset_root: /datasets/ImageNet8000/
+valid_dataset: Kodak
+valid_dataset_root: /datasets/Kodak/
+log_dir: logs/
+num_workers: 12
+use_cache: False
+
+# Checkpoint
+save_model: True
+checkpoint: ./logs/SemELIC_sm10dB_KLdv_fac_Kp5e3/latest_ckpt_ep0.pth.tar
+
+# GPU
+gpu_ids: ['0', '1', '3'] # Multi: use all devices / Single: use any available devices
+dist_backend: nccl # Only works for multi_gpu learning

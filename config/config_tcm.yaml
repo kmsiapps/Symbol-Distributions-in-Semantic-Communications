@@ -1,0 +1,55 @@
+# Single GPU training Usage
+# python train.py ./config/config_tcm.yaml
+
+# Multi GPU training Usage
+# torchrun --nproc_per_node=4 train.py config/config_tcm.yaml
+
+experiment_name: tcm
+
+# Model
+model: TCM
+model_params: {
+  N: 128,
+  M: 320,
+  config: [2,2,2,2,2,2],
+  head_dim: [8, 16, 32, 32, 16, 8],
+  drop_path_rate: 0.0,
+  
+}
+
+# Loss
+loss: mse
+lmbda: 1
+
+# Epoch
+initial_epoch: 0
+epochs: 2000
+
+# Batch Size
+train_batch_size: 8
+valid_batch_size: 24
+use_mini_dataset: False
+
+# Learning
+seed: 1030
+learning_rate: 1.0e-4
+aux_learning_rate: 1.0e-3
+lr_milestone_epoch: [1000, 2000]
+clip_max_norm: 1.0
+
+# Dataset
+train_dataset: ImageNet Large 8000
+train_dataset_root: /datasets/ImageNet/
+valid_dataset: Kodak
+valid_dataset_root: /datasets/Kodak/
+log_dir: logs/
+num_workers: 32
+
+# Checkpoint
+save_model: True
+# checkpoint: ./path_to_checkpoint.pth
+
+# GPU
+gpu_ids: ['0', '1', '2', '3'] # Multi: use all devices / Single: use any available devices
+dist_backend: nccl # Only works for multi_gpu learning
+
